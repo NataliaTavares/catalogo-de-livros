@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.Extensions.Configuration;
+using API_Catalogo.Repositorio;
+using API_Catalogo.Services;
+using API_Catalogo.Configuration;
 
 namespace API_Catalogo
 {
@@ -27,12 +30,19 @@ namespace API_Catalogo
             services.AddDbContext<AppDbContexto>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<IGenerosService, GenerosService>();
+            services.AddScoped<IGenerosRepository, GenerosRepository>();
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "API_Catalogo", Version = "v1" });
             });
 
             services.AddControllers();
+
+            services.AddAutoMapperConfiguration();
+
+            services.AddDependencyInjectionConfiguration();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
