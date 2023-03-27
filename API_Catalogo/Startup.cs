@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using API_Catalogo.Repositorio;
 using API_Catalogo.Services;
 using API_Catalogo.Configuration;
+using API_Catalogo.Repository;
 
 namespace API_Catalogo
 {
@@ -32,6 +33,8 @@ namespace API_Catalogo
 
             services.AddScoped<IGenerosService, GenerosService>();
             services.AddScoped<IGenerosRepository, GenerosRepository>();
+            services.AddScoped<IAutoresService, AutoresService>();
+            services.AddScoped<IAutoresRepository, AutoresRepository>();
 
             services.AddSwaggerGen(c =>
             {
