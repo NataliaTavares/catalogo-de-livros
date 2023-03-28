@@ -18,6 +18,11 @@ const Home = () => {
                             Generos
                         </Link>
                     </li>
+                    <li>
+                        <Link className="menu" to="/autores">
+                            Autores
+                        </Link>
+                    </li>
                 </ul>
             </nav>
         </div>
