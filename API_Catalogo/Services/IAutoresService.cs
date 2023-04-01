@@ -8,10 +8,13 @@ namespace API_Catalogo.Services
 {
     public interface IAutoresService
     {
+        Task<AutorView> GetAutorAsync(int id);
 
         Task<IEnumerable<AutorView>> GetAutoresAsync();
 
         Task<AutorView> InsertAutorAsync(NovoAutor novoAutor);
+
+        Task<AutorView> UpdateAutorAsync(AlteraAutor alteraAutor);
 
 
     }

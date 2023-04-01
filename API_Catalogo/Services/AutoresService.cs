@@ -1,9 +1,7 @@
 ﻿using API_Catalogo.Models;
 using API_Catalogo.Models.ModelView.Autores;
 using AutoMapper;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_Catalogo.Services
@@ -25,12 +23,22 @@ namespace API_Catalogo.Services
             return mapper.Map<IEnumerable<Autores>, IEnumerable<AutorView>>(await repository.GetAutoresAsync());
         }
 
+        public async Task<AutorView> GetAutorAsync(int id)
+        {
+            return mapper.Map<AutorView>(await repository.GetAutorAsync(id));
+        }
+
         public async Task<AutorView> InsertAutorAsync(NovoAutor novoAutor)
         {
             var autor = mapper.Map<Autores>(novoAutor);
             return mapper.Map<AutorView>(await repository.InsertAutorAsync(autor));
         }
 
+        public async Task<AutorView> UpdateAutorAsync(AlteraAutor alteraAutor)
+        {
+            var autor = mapper.Map<Autores>(alteraAutor);
+            return mapper.Map<AutorView>(await repository.UpdateAutorAsync(autor));
+        }
 
     }
 }

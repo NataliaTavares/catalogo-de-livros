@@ -10,8 +10,10 @@ namespace API_Catalogo.Services
     {
         Task<IEnumerable<Autores>> GetAutoresAsync();
 
+        Task<Autores> GetAutorAsync(int id);
+
         Task<Autores> InsertAutorAsync(Autores autor);
 
-
+        Task<Autores> UpdateAutorAsync(Autores autor);
     }
 }

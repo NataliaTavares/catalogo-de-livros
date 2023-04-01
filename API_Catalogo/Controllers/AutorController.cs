@@ -3,9 +3,7 @@ using API_Catalogo.Models.ModelView.Erro;
 using API_Catalogo.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_Catalogo.Controllers
@@ -31,6 +29,14 @@ namespace API_Catalogo.Controllers
             return Ok(await manager.GetAutoresAsync());
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(AutorView), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get(int id)
+        {
+            return Ok(await manager.GetAutorAsync(id));
+        }
 
         [HttpPost]
         [ProducesResponseType(typeof(AutorView), StatusCodes.Status201Created)]
@@ -41,10 +47,19 @@ namespace API_Catalogo.Controllers
             return CreatedAtAction(nameof(Get), new { id = autorInserido.Id }, autorInserido);
         }
 
-
-    
-
-
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(typeof(AutorView), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put(AlteraAutor autor)
+        {
+            var autorAtualizado = await manager.UpdateAutorAsync(autor);
+            if (autorAtualizado == null)
+            {
+                return NotFound();
+            }
+            return Ok(autorAtualizado);
+        }
 
 
     }

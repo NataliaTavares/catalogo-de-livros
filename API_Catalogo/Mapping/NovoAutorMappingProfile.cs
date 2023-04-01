@@ -1,5 +1,6 @@
 ﻿using API_Catalogo.Models;
 using API_Catalogo.Models.ModelView.Autores;
+using API_Catalogo.Models.ModelView.Livro;
 using AutoMapper;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,10 @@ namespace API_Catalogo.Mapping
         {
             CreateMap<NovoAutor, Autores>();
             CreateMap<Autores, AutorView>();
+            CreateMap<Livro, ReferenciaLivro>().ReverseMap();
+            CreateMap<Livro, LivroViewNome>().ReverseMap();
+            CreateMap<Livro, NovoLivro>().ReverseMap();
+            CreateMap<AlteraAutor, Autores>().ReverseMap();
         }
         
     }

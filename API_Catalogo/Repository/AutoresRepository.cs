@@ -41,6 +41,23 @@ namespace API_Catalogo.Repository
             return autor;
         }
 
+        public async Task<bool> ExisteAsync(int id)
+        {
+            return await context.Autores.AnyAsync(p => p.Id == id);
+        }
+
+        public async Task<Autores> UpdateAutorAsync(Autores autor)
+        {
+            var autorConsultado = await context.Autores
+                                    .SingleOrDefaultAsync(p => p.Id == autor.Id);
+            if (autorConsultado == null)
+            {
+                return null;
+            }
+            context.Entry(autorConsultado).CurrentValues.SetValues(autor);
+            await context.SaveChangesAsync();
+            return autorConsultado;
+        }
 
     }
 }
