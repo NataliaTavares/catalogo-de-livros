@@ -1,7 +1,6 @@
 using Catalogo.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -31,6 +30,8 @@ namespace API_Catalogo
             services.AddDbContext<AppDbContexto>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<ILivrosService, LivrosService>();
+            services.AddScoped<ILivroRepository, LivroRepository>();
             services.AddScoped<IGenerosService, GenerosService>();
             services.AddScoped<IGenerosRepository, GenerosRepository>();
             services.AddScoped<IAutoresService, AutoresService>();

@@ -11,6 +11,8 @@ namespace API_Catalogo.Configuration
 
         public static void AddDependencyInjectionConfiguration(this IServiceCollection services)
         {
+            services.AddScoped<ILivroRepository, LivroRepository>();
+            services.AddScoped<ILivrosService, LivrosService>();
             services.AddScoped<IGenerosRepository, GenerosRepository>();
             services.AddScoped<IAutoresRepository, AutoresRepository>();
 
