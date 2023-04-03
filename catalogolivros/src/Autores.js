@@ -16,7 +16,7 @@ const Autores = () => {
     const [updateData, setUpdateData] = useState(true);
 
     const [modalIncluir, setModalIncluir] = useState(false);
-
+    const [modalEditar, setModalEditar] = useState(false);
     const [filter, setFilter] = useState("");
 
     const [autorSelecionado, setAutorSelecionado] = useState({
@@ -24,8 +24,17 @@ const Autores = () => {
         nome: "",
     });
 
+    const selecionarAutor = (autor) => {
+        setAutorSelecionado(autor);
+        abrirFecharModalEditar();
+    };
+
     const abrirFecharModalIncluir = () => {
         setModalIncluir(!modalIncluir);
+    };
+
+    const abrirFecharModalEditar = () => {
+        setModalEditar(!modalEditar);
     };
 
     const handleChange = (e) => {
@@ -53,6 +62,25 @@ const Autores = () => {
                 setData(data.concat(response.data));
                 setUpdateData(true);
                 abrirFecharModalIncluir();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const pedidoPut = async () => {
+        await axios
+            .put(baseUrl + "/" + autorSelecionado.id, autorSelecionado)
+            .then((response) => {
+                var resposta = response.data;
+                var dadosAuxiliar = data;
+                dadosAuxiliar.map((autor) => {
+                    if (autor.id === autorSelecionado.id) {
+                        autor.nome = resposta.nome;
+                    }
+                });
+                setUpdateData(true);
+                abrirFecharModalEditar();
             })
             .catch((error) => {
                 console.log(error);
@@ -102,6 +130,7 @@ const Autores = () => {
                     <tr>
                         <th>Id</th>
                         <th>Nome</th>
+                        <th>Livros</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -109,6 +138,24 @@ const Autores = () => {
                         <tr className="borderTable" key={autor.id}>
                             <td>{autor.id}</td>
                             <td>{autor.nome}</td>
+
+                            <td>
+                                {autor.livro.map(function (a) {
+                                    const texto = a.nome;
+
+                                    return <p>{texto}</p>;
+                                })}
+                            </td>
+                            <td>
+                                <button
+                                    className="btn btn-warning"
+                                    onClick={() =>
+                                        selecionarAutor(autor, "Editar")
+                                    }
+                                >
+                                    Editar
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -142,6 +189,49 @@ const Autores = () => {
                     <button
                         className="btn- btn-danger"
                         onClick={() => abrirFecharModalIncluir()}
+                    >
+                        Cancelar
+                    </button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalEditar}>
+                <ModalHeader>Editar Autor</ModalHeader>
+
+                <ModalBody>
+                    <div className="form-group">
+                        <label>ID:</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            readOnly
+                            value={autorSelecionado && autorSelecionado.id}
+                        />
+                        <br />
+                        <label>Nome:</label>
+                        <br />
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="nome"
+                            onChange={handleChange}
+                            value={autorSelecionado && autorSelecionado.nome}
+                        />
+                        <br />
+                    </div>
+                </ModalBody>
+
+                <ModalFooter>
+                    <button
+                        className="btn-btb-primary"
+                        onClick={() => pedidoPut()}
+                    >
+                        Editar
+                    </button>
+                    {"   "}
+                    <button
+                        className="btn- btn-danger"
+                        onClick={() => abrirFecharModalEditar()}
                     >
                         Cancelar
                     </button>
