@@ -23,11 +23,22 @@ namespace API_Catalogo.Services
             return mapper.Map<IEnumerable<Generos>, IEnumerable<GeneroView>>(await repository.GetGenerosAsync());
         }
 
+        public async Task<GeneroView> GetGeneroAsync(int id)
+        {
+            return mapper.Map<GeneroView>(await repository.GetGeneroAsync(id));
+        }
+
 
         public async Task<GeneroView> InsertGeneroAsync(NovoGenero novoGenero)
     {
             var genero = mapper.Map<Generos>(novoGenero);
             return mapper.Map<GeneroView>(await repository.InsertGeneroAsync(genero));
+        }
+
+        public async Task<GeneroView> UpdateGeneroAsync(AlteraGenero alteraGenero)
+        {
+            var genero = mapper.Map<Generos>(alteraGenero);
+            return mapper.Map<GeneroView>(await repository.UpdateGeneroAsync(genero));
         }
 
     }

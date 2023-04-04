@@ -30,6 +30,14 @@ namespace API_Catalogo.Controllers
             return Ok(await manager.GetGenerosAsync());
         }
 
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(GeneroView), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get(int id)
+        {
+            return Ok(await manager.GetGeneroAsync(id));
+        }
 
         [HttpPost]
         [ProducesResponseType(typeof(GeneroView), StatusCodes.Status201Created)]
@@ -40,6 +48,19 @@ namespace API_Catalogo.Controllers
             return CreatedAtAction(nameof(Get), new { id = generoInserido.Id }, generoInserido);
         }
 
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(typeof(GeneroView), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put(AlteraGenero genero)
+        {
+            var generoAtualizado = await manager.UpdateGeneroAsync(genero);
+            if (generoAtualizado == null)
+            {
+                return NotFound();
+            }
+            return Ok(generoAtualizado);
+        }
 
 
 

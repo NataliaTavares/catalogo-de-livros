@@ -43,5 +43,24 @@ namespace API_Catalogo.Repositorio
             return genero;
         }
 
+        public async Task<bool> ExisteAsync(int id)
+        {
+            return await context.Generos.AnyAsync(p => p.Id == id);
+        }
+
+        public async Task<Generos> UpdateGeneroAsync(Generos genero)
+        {
+            var generoConsultado = await context.Generos
+                                    //.Include(p => p.Generos)
+                                    .SingleOrDefaultAsync(p => p.Id == genero.Id);
+            if (generoConsultado == null)
+            {
+                return null;
+            }
+            context.Entry(generoConsultado).CurrentValues.SetValues(genero);
+            await context.SaveChangesAsync();
+            return generoConsultado;
+        }
+
     }
 }

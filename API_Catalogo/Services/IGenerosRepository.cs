@@ -12,5 +12,9 @@ namespace API_Catalogo.Services
 
         Task<Generos> InsertGeneroAsync(Generos genero);
 
+        Task<Generos> GetGeneroAsync(int id);
+
+        Task<Generos> UpdateGeneroAsync(Generos genero);
+
     }
 }
