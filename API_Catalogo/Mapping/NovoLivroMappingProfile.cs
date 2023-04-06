@@ -22,6 +22,7 @@ namespace API_Catalogo.Mapping
             CreateMap<Generos, ReferenciaGenero>().ReverseMap();
             CreateMap<Generos, GeneroView>().ReverseMap();
             CreateMap<Generos, NovoGenero>().ReverseMap();
+            CreateMap<AlteraLivro, Livro>().ReverseMap();
 
         }
     }

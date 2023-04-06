@@ -28,7 +28,15 @@ namespace API_Catalogo.Controllers
             return Ok(await manager.GetLivrosAsync());
         }
 
-       
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(LivroView), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Get(int id)
+        {
+            return Ok(await manager.GetLivroAsync(id));
+        }
+
         [HttpPost]
         [ProducesResponseType(typeof(LivroView), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
@@ -38,5 +46,18 @@ namespace API_Catalogo.Controllers
             return CreatedAtAction(nameof(Get), new { id = livroInserido.Id }, livroInserido);
         }
 
+        [HttpPut("{id:int}")]
+        [ProducesResponseType(typeof(LivroView), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> Put(AlteraLivro livro)
+        {
+            var livroAtualizado = await manager.UpdateLivroAsync(livro);
+            if (livroAtualizado == null)
+            {
+                return NotFound();
+            }
+            return Ok(livroAtualizado);
+        }
     }
 }

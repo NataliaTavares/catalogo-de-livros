@@ -12,6 +12,9 @@ namespace API_Catalogo.Services
 
         Task<Livro> InsertLivroAsync(Livro livro);
 
+        Task<Livro> GetLivroAsync(int id);
+
+        Task<Livro> UpdateLivroAsync(Livro livro);
 
     }
 }
