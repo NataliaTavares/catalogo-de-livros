@@ -22,6 +22,7 @@ const Home = () => {
     const [updateData, setUpdateData] = useState(true);
 
     const [modalIncluir, setModalIncluir] = useState(false);
+    const [modalEditar, setModalEditar] = useState(false);
     const [filter, setFilter] = useState("");
 
     const [livroSelecionado, setLivroSelecionado] = useState({
@@ -34,6 +35,15 @@ const Home = () => {
 
     const abrirFecharModalIncluir = () => {
         setModalIncluir(!modalIncluir);
+    };
+
+    const abrirFecharModalEditar = () => {
+        setModalEditar(!modalEditar);
+    };
+
+    const selecionarLivro = (livro) => {
+        setLivroSelecionado(livro);
+        abrirFecharModalEditar();
     };
 
     const handleChange = (e) => {
@@ -103,6 +113,51 @@ const Home = () => {
             });
     };
 
+    const pedidoPut = async () => {
+        const dataBrasileira = livroSelecionado.data;
+        const dataAmericana = dataBrasileira.split("/").reverse().join("-");
+        livroSelecionado.data = dataAmericana;
+        await axios
+            .put(baseUrl + "/" + livroSelecionado.id, livroSelecionado)
+            .then((response) => {
+                var resposta = response.data;
+                var dadosAuxiliar = data;
+                dadosAuxiliar.map((livro) => {
+                    if (livro.id === livroSelecionado.id) {
+                        livro.nome = resposta.nome;
+                        livro.autores = resposta.autores;
+                        livro.data = dataAmericana;
+                        livro.genero = resposta.genero;
+                    }
+                });
+                setUpdateData(true);
+                abrirFecharModalEditar();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    function verNomeAutor() {
+        let aux = "";
+
+        Object.keys(livroSelecionado.autores).map(function (key) {
+            aux = livroSelecionado.autores[key];
+        });
+        let nomeAutor = aux["nome"];
+        return nomeAutor;
+    }
+
+    function verNomeGenero() {
+        let aux = "";
+
+        Object.keys(livroSelecionado.genero).map(function (key) {
+            aux = livroSelecionado.genero[key];
+        });
+        let nomeGenero = aux["nome"];
+        return nomeGenero;
+    }
+
     const filteredItems = filter
         ? data.filter((livro) =>
               livro.nome.toLowerCase().includes(filter.toLowerCase())
@@ -117,6 +172,17 @@ const Home = () => {
             setUpdateData(false);
         }
     }, [updateData]);
+
+    function ConvertDataAmericana(livroData) {
+        const dataAmericana = livroData;
+        const dataBrasileira = dataAmericana
+            .split("-")
+            .reverse()
+            .join("/")
+            .replace("T00:00:00", "");
+
+        return dataBrasileira;
+    }
 
     return (
         <div className="container">
@@ -174,6 +240,16 @@ const Home = () => {
 
                             <td>{moment(livro.data).format("DD/MM/YYYY")}</td>
                             <td>{livro.genero.map((t) => t.nome).join()}</td>
+                            <td>
+                                <button
+                                    className="btn btn-warning"
+                                    onClick={() =>
+                                        selecionarLivro(livro, "Editar")
+                                    }
+                                >
+                                    Editar
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -244,6 +320,89 @@ const Home = () => {
                     <button
                         className="btn- btn-danger"
                         onClick={() => abrirFecharModalIncluir()}
+                    >
+                        Cancelar
+                    </button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalEditar}>
+                <ModalHeader>Editar Livros</ModalHeader>
+
+                <ModalBody>
+                    <div className="form-group">
+                        <label>ID:</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            readOnly
+                            value={livroSelecionado && livroSelecionado.id}
+                        />
+                        <br />
+
+                        <label>Nome:</label>
+                        <br />
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="nome"
+                            onChange={handleChange}
+                            value={livroSelecionado && livroSelecionado.nome}
+                        />
+                        <br />
+                        <label>Autor: </label>
+                        <br />
+                        <select
+                            name="autores"
+                            id="autores"
+                            onChange={handleChangeOption}
+                        >
+                            <option selected>{verNomeAutor()}</option>
+                            {autoresData.map((t) => (
+                                <option value={t.id}>{t.nome}</option>
+                            ))}
+                        </select>
+                        <br />
+                        <label>Data Publicação: </label>
+                        <br />
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="data"
+                            onChange={handleChange}
+                            value={
+                                livroSelecionado &&
+                                ConvertDataAmericana(livroSelecionado.data)
+                            }
+                        />
+                        <br />
+                        <label>Genero:</label>
+                        <br />
+                        <select
+                            name="genero"
+                            id="genero"
+                            onChange={handleChangeOption}
+                        >
+                            <option selected>{verNomeGenero()}</option>
+                            {generosData.map((t) => (
+                                <option value={t.id}>{t.nome}</option>
+                            ))}
+                        </select>
+                        <br />
+                    </div>
+                </ModalBody>
+
+                <ModalFooter>
+                    <button
+                        className="btn-btb-primary"
+                        onClick={() => pedidoPut()}
+                    >
+                        Editar
+                    </button>
+                    {"   "}
+                    <button
+                        className="btn- btn-danger"
+                        onClick={() => abrirFecharModalEditar()}
                     >
                         Cancelar
                     </button>

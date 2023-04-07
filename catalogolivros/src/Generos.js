@@ -16,6 +16,7 @@ const Generos = () => {
     const [updateData, setUpdateData] = useState(true);
 
     const [modalIncluir, setModalIncluir] = useState(false);
+    const [modalEditar, setModalEditar] = useState(false);
 
     const [filter, setFilter] = useState("");
 
@@ -24,8 +25,17 @@ const Generos = () => {
         nome: "",
     });
 
+    const selecionarGenero = (genero) => {
+        setGeneroSelecionado(genero);
+        abrirFecharModalEditar();
+    };
+
     const abrirFecharModalIncluir = () => {
         setModalIncluir(!modalIncluir);
+    };
+
+    const abrirFecharModalEditar = () => {
+        setModalEditar(!modalEditar);
     };
 
     const handleChange = (e) => {
@@ -59,6 +69,25 @@ const Generos = () => {
             });
     };
 
+    const pedidoPut = async () => {
+        await axios
+            .put(baseUrl + "/" + generoSelecionado.id, generoSelecionado)
+            .then((response) => {
+                var resposta = response.data;
+                var dadosAuxiliar = data;
+                dadosAuxiliar.map((genero) => {
+                    if (genero.id === generoSelecionado.id) {
+                        genero.nome = resposta.nome;
+                    }
+                });
+                setUpdateData(true);
+                abrirFecharModalEditar();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     const filteredItems = filter
         ? data.filter((genero) =>
               genero.nome.toLowerCase().includes(filter.toLowerCase())
@@ -71,6 +100,7 @@ const Generos = () => {
             setUpdateData(false);
         }
     }, [updateData]);
+
     return (
         <div className="container">
             <h1>Generos</h1>
@@ -100,6 +130,7 @@ const Generos = () => {
                     <tr>
                         <th>Id</th>
                         <th>Nome</th>
+                        <th>Livros</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -107,6 +138,23 @@ const Generos = () => {
                         <tr className="borderTable" key={genero.id}>
                             <td>{genero.id}</td>
                             <td>{genero.nome}</td>
+                            <td>
+                                {genero.livro.map(function (a) {
+                                    const texto = a.nome;
+
+                                    return <p>{texto}</p>;
+                                })}
+                            </td>
+                            <td>
+                                <button
+                                    className="btn btn-warning"
+                                    onClick={() =>
+                                        selecionarGenero(genero, "Editar")
+                                    }
+                                >
+                                    Editar
+                                </button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
@@ -140,6 +188,49 @@ const Generos = () => {
                     <button
                         className="btn- btn-danger"
                         onClick={() => abrirFecharModalIncluir()}
+                    >
+                        Cancelar
+                    </button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalEditar}>
+                <ModalHeader>Editar Genero</ModalHeader>
+
+                <ModalBody>
+                    <div className="form-group">
+                        <label>ID:</label>
+                        <input
+                            type="text"
+                            className="form-control"
+                            readOnly
+                            value={generoSelecionado && generoSelecionado.id}
+                        />
+                        <br />
+                        <label>Nome:</label>
+                        <br />
+                        <input
+                            type="text"
+                            className="form-control"
+                            name="nome"
+                            onChange={handleChange}
+                            value={generoSelecionado && generoSelecionado.nome}
+                        />
+                        <br />
+                    </div>
+                </ModalBody>
+
+                <ModalFooter>
+                    <button
+                        className="btn-btb-primary"
+                        onClick={() => pedidoPut()}
+                    >
+                        Editar
+                    </button>
+                    {"   "}
+                    <button
+                        className="btn- btn-danger"
+                        onClick={() => abrirFecharModalEditar()}
                     >
                         Cancelar
                     </button>
