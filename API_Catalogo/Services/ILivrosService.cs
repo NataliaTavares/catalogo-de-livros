@@ -1,7 +1,5 @@
 ﻿using API_Catalogo.Models.ModelView.Livro;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_Catalogo.Services
@@ -16,5 +14,7 @@ namespace API_Catalogo.Services
         Task<LivroView> GetLivroAsync(int id);
 
         Task<LivroView> UpdateLivroAsync(AlteraLivro alteraLivro);
+
+        Task DeleteLivroAsync(int id);
     }
 }

@@ -102,5 +102,17 @@ namespace API_Catalogo.Repository
             }
         }
 
+        public async Task<Livro> DeleteLivroAsync(int id)
+        {
+            var livroConsultado = await context.Livros.FindAsync(id);
+            if (livroConsultado == null)
+            {
+                return null;
+            }
+            var livroRemovido = context.Livros.Remove(livroConsultado);
+            await context.SaveChangesAsync();
+            return livroRemovido.Entity;
+        }
+
     }
 }

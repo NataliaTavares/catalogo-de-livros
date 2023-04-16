@@ -45,5 +45,10 @@ namespace API_Catalogo.Services
             return mapper.Map<LivroView>(await repository.UpdateLivroAsync(livro));
         }
 
+        public async Task DeleteLivroAsync(int id)
+        {
+            await repository.DeleteLivroAsync(id);
+        }
+
     }
 }

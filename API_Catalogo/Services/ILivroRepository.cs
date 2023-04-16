@@ -1,7 +1,5 @@
 ﻿using API_Catalogo.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_Catalogo.Services
@@ -15,6 +13,8 @@ namespace API_Catalogo.Services
         Task<Livro> GetLivroAsync(int id);
 
         Task<Livro> UpdateLivroAsync(Livro livro);
+
+        Task<Livro> DeleteLivroAsync(int id);
 
     }
 }
