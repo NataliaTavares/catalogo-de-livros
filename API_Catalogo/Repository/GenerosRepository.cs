@@ -2,9 +2,7 @@
 using API_Catalogo.Services;
 using Catalogo.Context;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace API_Catalogo.Repositorio
@@ -51,7 +49,7 @@ namespace API_Catalogo.Repositorio
         public async Task<Generos> UpdateGeneroAsync(Generos genero)
         {
             var generoConsultado = await context.Generos
-                                    //.Include(p => p.Generos)
+                                    
                                     .SingleOrDefaultAsync(p => p.Id == genero.Id);
             if (generoConsultado == null)
             {
@@ -62,5 +60,16 @@ namespace API_Catalogo.Repositorio
             return generoConsultado;
         }
 
+        public async Task<Generos> DeleteGeneroAsync(int id)
+        {
+            var generoConsultado = await context.Generos.FindAsync(id);
+            if (generoConsultado == null)
+            {
+                return null;
+            }
+            var generoRemovido = context.Generos.Remove(generoConsultado);
+            await context.SaveChangesAsync();
+            return generoRemovido.Entity;
+        }
     }
 }

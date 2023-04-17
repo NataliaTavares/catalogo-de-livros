@@ -41,5 +41,10 @@ namespace API_Catalogo.Services
             return mapper.Map<GeneroView>(await repository.UpdateGeneroAsync(genero));
         }
 
+        public async Task DeleteGeneroAsync(int id)
+        {
+            await repository.DeleteGeneroAsync(id);
+        }
+
     }
 }

@@ -16,5 +16,7 @@ namespace API_Catalogo.Services
 
         Task<Generos> UpdateGeneroAsync(Generos genero);
 
+        Task<Generos> DeleteGeneroAsync(int id);
+
     }
 }
