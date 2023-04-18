@@ -16,6 +16,6 @@ namespace API_Catalogo.Services
 
         Task<AutorView> UpdateAutorAsync(AlteraAutor alteraAutor);
 
-
+        Task DeleteAutorAsync(int id);
     }
 }

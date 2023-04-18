@@ -59,5 +59,17 @@ namespace API_Catalogo.Repository
             return autorConsultado;
         }
 
+        public async Task<Autores> DeleteAutorAsync(int id)
+        {
+            var autorConsultado = await context.Autores.FindAsync(id);
+            if (autorConsultado == null)
+            {
+                return null;
+            }
+            var autorRemovido = context.Autores.Remove(autorConsultado);
+            await context.SaveChangesAsync();
+            return autorRemovido.Entity;
+        }
+
     }
 }

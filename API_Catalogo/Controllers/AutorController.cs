@@ -61,6 +61,16 @@ namespace API_Catalogo.Controllers
             return Ok(autorAtualizado);
         }
 
+        [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            await manager.DeleteAutorAsync(id);
+            return NoContent();
+
+        }
 
     }
 }

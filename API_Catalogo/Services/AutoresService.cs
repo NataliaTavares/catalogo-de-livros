@@ -40,6 +40,11 @@ namespace API_Catalogo.Services
             return mapper.Map<AutorView>(await repository.UpdateAutorAsync(autor));
         }
 
+        public async Task DeleteAutorAsync(int id)
+        {
+            await repository.DeleteAutorAsync(id);
+        }
+
     }
 }
 
