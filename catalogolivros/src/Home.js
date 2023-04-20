@@ -23,6 +23,7 @@ const Home = () => {
 
     const [modalIncluir, setModalIncluir] = useState(false);
     const [modalEditar, setModalEditar] = useState(false);
+    const [modalExcluir, setModalExcluir] = useState(false);
     const [filter, setFilter] = useState("");
 
     const [livroSelecionado, setLivroSelecionado] = useState({
@@ -41,9 +42,15 @@ const Home = () => {
         setModalEditar(!modalEditar);
     };
 
-    const selecionarLivro = (livro) => {
+    const abrirFecharModalExcluir = () => {
+        setModalExcluir(!modalExcluir);
+    };
+
+    const selecionarLivro = (livro, opcao) => {
         setLivroSelecionado(livro);
-        abrirFecharModalEditar();
+        opcao === "Editar"
+            ? abrirFecharModalEditar()
+            : abrirFecharModalExcluir();
     };
 
     const handleChange = (e) => {
@@ -132,6 +139,19 @@ const Home = () => {
                 });
                 setUpdateData(true);
                 abrirFecharModalEditar();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const pedidoDelete = async () => {
+        await axios
+            .delete(baseUrl + "/" + livroSelecionado.id)
+            .then((response) => {
+                setData(data.filter((livro) => livro.id !== response.data));
+                setUpdateData(true);
+                abrirFecharModalExcluir();
             })
             .catch((error) => {
                 console.log(error);
@@ -248,6 +268,14 @@ const Home = () => {
                                     }
                                 >
                                     Editar
+                                </button>
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() =>
+                                        selecionarLivro(livro, "Excluir")
+                                    }
+                                >
+                                    Excluir
                                 </button>
                             </td>
                         </tr>
@@ -405,6 +433,30 @@ const Home = () => {
                         onClick={() => abrirFecharModalEditar()}
                     >
                         Cancelar
+                    </button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalExcluir}>
+                <ModalBody>
+                    Confirma a exclusão deste livro:{" "}
+                    {livroSelecionado && livroSelecionado.nome} ?
+                </ModalBody>
+
+                <ModalFooter>
+                    <button
+                        className="btm- btn-danger"
+                        onClick={() => pedidoDelete()}
+                    >
+                        {" "}
+                        Sim{" "}
+                    </button>
+                    <button
+                        className="btm- btn-secondary"
+                        onClick={() => abrirFecharModalExcluir()}
+                    >
+                        {" "}
+                        Não{" "}
                     </button>
                 </ModalFooter>
             </Modal>
