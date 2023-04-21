@@ -17,6 +17,7 @@ const Generos = () => {
 
     const [modalIncluir, setModalIncluir] = useState(false);
     const [modalEditar, setModalEditar] = useState(false);
+    const [modalExcluir, setModalExcluir] = useState(false);
 
     const [filter, setFilter] = useState("");
 
@@ -25,9 +26,11 @@ const Generos = () => {
         nome: "",
     });
 
-    const selecionarGenero = (genero) => {
+    const selecionarGenero = (genero, opcao) => {
         setGeneroSelecionado(genero);
-        abrirFecharModalEditar();
+        opcao === "Editar"
+            ? abrirFecharModalEditar()
+            : abrirFecharModalExcluir();
     };
 
     const abrirFecharModalIncluir = () => {
@@ -36,6 +39,10 @@ const Generos = () => {
 
     const abrirFecharModalEditar = () => {
         setModalEditar(!modalEditar);
+    };
+
+    const abrirFecharModalExcluir = () => {
+        setModalExcluir(!modalExcluir);
     };
 
     const handleChange = (e) => {
@@ -82,6 +89,19 @@ const Generos = () => {
                 });
                 setUpdateData(true);
                 abrirFecharModalEditar();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const pedidoDelete = async () => {
+        await axios
+            .delete(baseUrl + "/" + generoSelecionado.id)
+            .then((response) => {
+                setData(data.filter((genero) => genero.id !== response.data));
+                setUpdateData(true);
+                abrirFecharModalExcluir();
             })
             .catch((error) => {
                 console.log(error);
@@ -153,6 +173,14 @@ const Generos = () => {
                                     }
                                 >
                                     Editar
+                                </button>
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() =>
+                                        selecionarGenero(genero, "Excluir")
+                                    }
+                                >
+                                    Excluir
                                 </button>
                             </td>
                         </tr>
@@ -233,6 +261,29 @@ const Generos = () => {
                         onClick={() => abrirFecharModalEditar()}
                     >
                         Cancelar
+                    </button>
+                </ModalFooter>
+            </Modal>
+            <Modal isOpen={modalExcluir}>
+                <ModalBody>
+                    Confirma a exclusão deste genero:{" "}
+                    {generoSelecionado && generoSelecionado.nome} ?
+                </ModalBody>
+
+                <ModalFooter>
+                    <button
+                        className="btm- btn-danger"
+                        onClick={() => pedidoDelete()}
+                    >
+                        {" "}
+                        Sim{" "}
+                    </button>
+                    <button
+                        className="btm- btn-secondary"
+                        onClick={() => abrirFecharModalExcluir()}
+                    >
+                        {" "}
+                        Não{" "}
                     </button>
                 </ModalFooter>
             </Modal>
