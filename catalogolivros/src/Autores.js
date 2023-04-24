@@ -17,6 +17,7 @@ const Autores = () => {
 
     const [modalIncluir, setModalIncluir] = useState(false);
     const [modalEditar, setModalEditar] = useState(false);
+    const [modalExcluir, setModalExcluir] = useState(false);
     const [filter, setFilter] = useState("");
 
     const [autorSelecionado, setAutorSelecionado] = useState({
@@ -24,9 +25,11 @@ const Autores = () => {
         nome: "",
     });
 
-    const selecionarAutor = (autor) => {
+    const selecionarAutor = (autor, opcao) => {
         setAutorSelecionado(autor);
-        abrirFecharModalEditar();
+        opcao === "Editar"
+            ? abrirFecharModalEditar()
+            : abrirFecharModalExcluir();
     };
 
     const abrirFecharModalIncluir = () => {
@@ -35,6 +38,10 @@ const Autores = () => {
 
     const abrirFecharModalEditar = () => {
         setModalEditar(!modalEditar);
+    };
+
+    const abrirFecharModalExcluir = () => {
+        setModalExcluir(!modalExcluir);
     };
 
     const handleChange = (e) => {
@@ -81,6 +88,19 @@ const Autores = () => {
                 });
                 setUpdateData(true);
                 abrirFecharModalEditar();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    const pedidoDelete = async () => {
+        await axios
+            .delete(baseUrl + "/" + autorSelecionado.id)
+            .then((response) => {
+                setData(data.filter((autor) => autor.id !== response.data));
+                setUpdateData(true);
+                abrirFecharModalExcluir();
             })
             .catch((error) => {
                 console.log(error);
@@ -154,6 +174,14 @@ const Autores = () => {
                                     }
                                 >
                                     Editar
+                                </button>
+                                <button
+                                    className="btn btn-danger"
+                                    onClick={() =>
+                                        selecionarAutor(autor, "Excluir")
+                                    }
+                                >
+                                    Excluir
                                 </button>
                             </td>
                         </tr>
@@ -234,6 +262,30 @@ const Autores = () => {
                         onClick={() => abrirFecharModalEditar()}
                     >
                         Cancelar
+                    </button>
+                </ModalFooter>
+            </Modal>
+
+            <Modal isOpen={modalExcluir}>
+                <ModalBody>
+                    Confirma a exclusão deste autor:{" "}
+                    {autorSelecionado && autorSelecionado.nome} ?
+                </ModalBody>
+
+                <ModalFooter>
+                    <button
+                        className="btm- btn-danger"
+                        onClick={() => pedidoDelete()}
+                    >
+                        {" "}
+                        Sim{" "}
+                    </button>
+                    <button
+                        className="btm- btn-secondary"
+                        onClick={() => abrirFecharModalExcluir()}
+                    >
+                        {" "}
+                        Não{" "}
                     </button>
                 </ModalFooter>
             </Modal>
