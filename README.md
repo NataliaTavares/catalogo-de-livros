@@ -16,7 +16,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 
 ## 💻 Projeto
 
-Esse projeto foi construído como metodo para avalição para o curso de Analise e desenvolvimento de Sistemas.
+Este projeto foi construído como metodo para avalição para o curso de Analise e desenvolvimento de Sistemas.
 
 ## Como utilizar?
 
@@ -24,7 +24,7 @@ Esse projeto foi construído como metodo para avalição para o curso de Analise
 
 2. Abra o projeto no Visual Studio.
 
-3. Utilize o comando 'dotnet restore' para a restauração dos pacotes nuggets.
+3. Utilize o comando `dotnet restore` para a restauração dos pacotes nuggets.
 
 4. Crie o banco de dados por meio do gerenciador de servidore no próprio VS.
 
